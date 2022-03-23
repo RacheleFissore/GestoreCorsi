@@ -53,7 +53,8 @@ CREATE TABLE IF NOT EXISTS `iscrizione` (
   KEY `FK_iscrizione_corso` (`codins`),
   CONSTRAINT `FK_iscrizione_studente` FOREIGN KEY (`matricola`) REFERENCES `studente` (`matricola`),
   CONSTRAINT `FK_iscrizione_corso` FOREIGN KEY (`codins`) REFERENCES `corso` (`codins`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
 
 -- Dump dei dati della tabella iscritticorsi.iscrizione: ~3.120 rows (circa)
 DELETE FROM `iscrizione`;
