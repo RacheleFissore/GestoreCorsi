@@ -9,7 +9,9 @@ import java.util.*;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.corsi.model.Corso;
+import it.polito.tdp.corsi.model.Divisione;
 import it.polito.tdp.corsi.model.Model;
+import it.polito.tdp.corsi.model.Studente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,7 +20,7 @@ import javafx.scene.control.TextField;
 
 public class FXMLController {
 
-	private Model model;
+	private Model model; // Mi permette di accedere al modello
 	
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -65,25 +67,72 @@ public class FXMLController {
     		return;
     	}
     	
-    	List<Corso> corsi = this.model.getCorsiByPeriodo(periodoNumerico); // Dal modello recupero il risultato della query
+    	List<Corso> corsi = this.model.getCorsiByPeriodo(periodoNumerico); // Dal modello recupero il risultato della query andando a richiamare il
+    																	   // metodo per ottenere i corsi relativi ad un periodo didattico che viene
+    																	   // passato per parametro
     	for(Corso c : corsi) {
     		txtRisultato.appendText(c + "\n");
     	}
     }
 
     @FXML
-    void numeroStudenti(ActionEvent event) {
+    void numeroStudenti(ActionEvent event) { // Metodo associato alla query di count del numero di studenti per corso
+    	String periodo = txtPeriodo.getText();
+    	int periodoNumerico;
+    	try {
+    		periodoNumerico = Integer.parseInt(periodo);
+    	} catch(NumberFormatException e) {
+    		txtRisultato.setText("Inserisci un periodo numerico");
+    		return; // L'input è sbagliato perchè non contiene un numero
+    	}
     	
+    	if(periodoNumerico < 1 || periodoNumerico > 2) {
+    		txtRisultato.setText("Inserisci 1 o 2 come periodo numerico");
+    		return;
+    	}
+    	
+    	Map<Corso, Integer> iscritti = this.model.getIscritti(periodoNumerico);
+    	
+    	for(Corso c : iscritti.keySet()) { // iscritti.keySet() -> restituisce l'elenco delle chiavi della mappa
+    		txtRisultato.appendText(c + " " + iscritti.get(c) + "\n");
+    	}
     }
 
     @FXML
     void stampaDivisione(ActionEvent event) {
-
+    	// Dato il codice di un corso, stampare la divisione degli studenti iscritti tra i vari corsi di studio (CDS)
+    	txtRisultato.clear();
+    	String codins = txtCorso.getText();
+    	if(codins == null || codins == " ") {
+    		txtRisultato.appendText("Inserisci un codice di un corso");
+    		return;
+    	}
+    	
+    	//TODO controllo che il corso esista
+    	List<Divisione> risultato = this.model.getDivisioneStudenti(codins);
+    	Collections.sort(risultato); // Dobbiamo dirgli in che modo fare l'ordinamento
+    	// Il comparator ci permette di ordinare quando ci sono più criteri di ordinamento multipli
+    	// Se le classi usano un unico metodo di comparazione e viene fatto direttamwnte dentro la classe Divisione in questo caso
+    	for(Divisione d : risultato) {
+    		txtRisultato.appendText(d.getCDS() + "\t" + d.getN() + "\n");
+    	}
     }
 
     @FXML
     void stampaStudenti(ActionEvent event) {
-
+    	// Ottenimento dell'input e suo controllo
+    	txtRisultato.clear();
+    	String codins = txtCorso.getText();
+    	if(codins == null || codins == " ") {
+    		txtRisultato.appendText("Inserisci un codice di un corso");
+    		return;
+    	}
+    	
+    	//TODO controllo che il corso esista
+    	
+    	for(Studente s : this.model.getStudentiByCorso(codins)) {
+    		txtRisultato.appendText(s + "\n");
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

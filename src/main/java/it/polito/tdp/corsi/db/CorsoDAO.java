@@ -43,14 +43,40 @@ public class CorsoDAO {
 		}
 	}
 	
-	// COUNT(*) -> conto le righe --> siccome ho una funzione di aggregazione devo usare una GROUP BY in cui sono contenuti tutti gli attributi
-	// messi prima della COUNT
+	public Map<Corso, Integer> getIscritti(int periodo) {
+		// COUNT(*) -> conto le righe --> siccome ho una funzione di aggregazione devo usare una GROUP BY in cui sono contenuti tutti gli attributi
+		// messi prima della COUNT. Metto il ? al posto del parametro del periodo didattico perchè voglio usare quello che viene passato per parametro
+		
+		String sql = "SELECT c.codins, c.crediti, c.nome, c.pd, COUNT(*) AS n "
+				+ "	FROM corso c, iscrizione i "
+				+ "	WHERE c.pd = ? "
+				+ "	AND c.codins = i.codins "
+				+ "	GROUP BY c.codins, c.crediti, c.nome, c.pd";
+		
+		Map<Corso, Integer> result = new HashMap<Corso, Integer>();
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, periodo); 
+			ResultSet rs = st.executeQuery();
+			
+			while(rs.next()) {
+				// Nella mappa vado a mettere il corso come key e poi il numero di iscritti come value
+				Corso corso = new Corso(rs.getString("codins"), rs.getInt("crediti"), rs.getString("nome"), rs.getInt("pd"));
+				result.put(corso, rs.getInt("n")); // rs.getInt("n") -> è il valore della colonna count
+			}
+			
+			st.close();
+			rs.close();
+			conn.close();
+			return result;
+		} catch(SQLException e) {
+			System.err.println("Errore nel DAO");
+			e.printStackTrace();
+			return null;
+		}
+	}
+ 	
 	
-	/*
-	SELECT c.codins, c.crediti, c.nome, c.pd, COUNT(*) AS n
-	FROM corso c, iscrizione i
-	WHERE c.pd = 1
-	AND c.codins = i.codins
-	GROUP BY c.codins, c.crediti, c.nome, c.pd
-	*/
+
 }
