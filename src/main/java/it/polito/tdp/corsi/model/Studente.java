@@ -4,7 +4,8 @@ public class Studente {
 	private Integer matricola;
 	private String cognome;
 	private String nome;
-	private String CDS;
+	private String CDS; // E' il corso di studi a cui è iscritto uno studente, quindi gestionale, informatica ecc
+	
 	public Studente(Integer matricola, String cognome, String nome, String cDS) {
 		super();
 		this.matricola = matricola;

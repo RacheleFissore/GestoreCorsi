@@ -6,7 +6,7 @@ public class Corso {
 	private String codins;
 	private Integer crediti;
 	private String nome;
-	private Integer pd;
+	private Integer pd; // E' il periodo didattico in cui si svolge il corso
 	
 	public Corso(String codins, Integer crediti, String nome, Integer pd) {
 		super();

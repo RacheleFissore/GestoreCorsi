@@ -20,7 +20,7 @@ public class StudenteDAO {
 		try {
 			Connection conn = ConnectDB.getConnection();
 			PreparedStatement st = conn.prepareStatement(sql);
-			st.setString(1, codins); 
+			st.setString(1, codins); // Come parametro gli passo il codice del corso che è stato passato in input dall'utente
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()) {
@@ -39,11 +39,12 @@ public class StudenteDAO {
 	}
 	
 	public List<Divisione> getDivisioneStudenti(String codins) {
+		// Per ogni corso di studio (CDS) devo stampare il numero di studenti iscritti al corso passato come parametro
 		String sql = "SELECT s.CDS, COUNT(*) AS n "
 				+ "FROM studente s , iscrizione i "
 				+ "WHERE s.matricola = i.matricola "
 				+ "AND i.codins = ? "
-				+ "AND s.CDS <> '' "
+				+ "AND s.CDS <> '' " // Nel db c'era una riga vuota e allora non la prendo
 				+ "GROUP BY s.CDS";
 		
 		List<Divisione> result = new ArrayList<Divisione>();

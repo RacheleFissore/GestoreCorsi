@@ -63,7 +63,7 @@ public class CorsoDAO {
 			while(rs.next()) {
 				// Nella mappa vado a mettere il corso come key e poi il numero di iscritti come value
 				Corso corso = new Corso(rs.getString("codins"), rs.getInt("crediti"), rs.getString("nome"), rs.getInt("pd"));
-				result.put(corso, rs.getInt("n")); // rs.getInt("n") -> è il valore della colonna count
+				result.put(corso, rs.getInt("n")); // rs.getInt("n") -> è il valore della colonna count che è stat rinominata come n
 			}
 			
 			st.close();

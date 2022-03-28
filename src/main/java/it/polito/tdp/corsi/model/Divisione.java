@@ -1,6 +1,6 @@
 package it.polito.tdp.corsi.model;
 
-public class Divisione implements Comparable<Divisione>{
+public class Divisione implements Comparable<Divisione> {
 	private String CDS;
 	private Integer n;
 	
@@ -24,7 +24,7 @@ public class Divisione implements Comparable<Divisione>{
 	}
 	
 	public int compareTo(Divisione o) {
-		return o.getCDS().compareTo(this.CDS);
+		return (-1)*this.CDS.compareTo(o.getCDS()); // Ordinamento alfabetico decrescente
+		//return this.CDS.compareTo(o.getCDS()); // Ordinamento alfabetico crescente
 	}
-	
 }

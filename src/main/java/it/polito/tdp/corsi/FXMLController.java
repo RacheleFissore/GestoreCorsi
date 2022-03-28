@@ -55,11 +55,13 @@ public class FXMLController {
     	
     	String periodo = txtPeriodo.getText();
     	int periodoNumerico;
+    	
+    	// Controllo che l'input sia corretto, ossia che sia stato inserito un numero
     	try {
     		periodoNumerico = Integer.parseInt(periodo);
     	} catch(NumberFormatException e) {
     		txtRisultato.setText("Inserisci un periodo numerico");
-    		return; // L'input è sbagliato perchè non contiene un numero
+    		return; 
     	}
     	
     	if(periodoNumerico < 1 || periodoNumerico > 2) {
@@ -94,13 +96,13 @@ public class FXMLController {
     	Map<Corso, Integer> iscritti = this.model.getIscritti(periodoNumerico);
     	
     	for(Corso c : iscritti.keySet()) { // iscritti.keySet() -> restituisce l'elenco delle chiavi della mappa
-    		txtRisultato.appendText(c + " " + iscritti.get(c) + "\n");
+    		txtRisultato.appendText(c + " " + iscritti.get(c) + "\n"); // iscritti.get(c) mi restituisce il valore della count associato a quel corso
     	}
     }
 
     @FXML
     void stampaDivisione(ActionEvent event) {
-    	// Dato il codice di un corso, stampare la divisione degli studenti iscritti tra i vari corsi di studio (CDS)
+    	// Risultato query: Dato il codice di un corso, stampare la divisione degli studenti iscritti tra i vari corsi di studio (CDS)
     	txtRisultato.clear();
     	String codins = txtCorso.getText();
     	if(codins == null || codins == " ") {
@@ -120,6 +122,9 @@ public class FXMLController {
 
     @FXML
     void stampaStudenti(ActionEvent event) {
+    	// Risultato query: Elencare tutti gli studenti di un determinato corso. L'utente inserisce il codice di un corso, e il programma stampa tutti 
+    	// gli studenti iscritti.
+    	
     	// Ottenimento dell'input e suo controllo
     	txtRisultato.clear();
     	String codins = txtCorso.getText();
